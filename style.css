@@ -1,0 +1,388 @@
+/* Premium Glassmorphic Styling for Iris KNN */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700&display=swap');
+
+:root {
+    --bg-dark: #0a0b10;
+    --card-bg: rgba(18, 20, 32, 0.6);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    
+    /* Harmonious colors */
+    --purple: #a855f7;
+    --cyan: #06b6d4;
+    --rose: #f43f5e;
+    --yellow: #eab308;
+    
+    --purple-glow: rgba(168, 85, 247, 0.15);
+    --cyan-glow: rgba(6, 182, 212, 0.15);
+    --rose-glow: rgba(244, 63, 94, 0.15);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+header {
+    padding: 2rem;
+    text-align: center;
+    background: radial-gradient(circle at top, rgba(168, 85, 247, 0.1) 0%, transparent 60%);
+    border-bottom: 1px solid var(--card-border);
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #a855f7 0%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+/* Tabs */
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.tab-btn.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--cyan) 100%);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    #visualizerTab.active {
+        grid-template-columns: 400px 1fr;
+    }
+    #metricsTab.active {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Glass Cards */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Form Controls */
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.value-display {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--cyan);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+select {
+    background: #181922;
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* Predictions Card */
+.prediction-display {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.prediction-text {
+    font-size: 2.2rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px currentColor;
+    margin: 0.5rem 0;
+}
+
+.text-setosa { color: var(--purple); }
+.text-versicolor { color: var(--cyan); }
+.text-virginica { color: var(--rose); }
+
+/* Vote Breakdown */
+.vote-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+.vote-bar-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.vote-bar-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.vote-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-setosa { background: var(--purple); }
+.fill-versicolor { background: var(--cyan); }
+.fill-virginica { background: var(--rose); }
+
+/* Visualizer Canvas Card */
+.plot-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #111218;
+    border: 1px solid var(--card-border);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+}
+
+/* Legend colors */
+.legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot.setosa { background: var(--purple); }
+.dot.versicolor { background: var(--cyan); }
+.dot.virginica { background: var(--rose); }
+.dot.query { 
+    background: var(--yellow);
+    border: 1.5px solid #ffffff;
+}
+
+/* Metrics Section */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    padding: 1.2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.metric-val {
+    font-size: 1.8rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--cyan);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--card-border);
+}
+
+th {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Elbow Plot Image styling */
+.img-container {
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+}
+
+.img-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+footer {
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--card-border);
+    background: rgba(0, 0, 0, 0.2);
+}

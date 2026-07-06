@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KNN Iris Classification Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>KNN Iris Classification</h1>
+        <p>Interactive machine learning playground demonstrating StandardScaler normalization, KNN classification, and nearest-neighbor vector connections.</p>
+    </header>
+
+    <main>
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="visualizerTab" id="btn-visualizer">Interactive Predictor</button>
+            <button class="tab-btn" data-tab="metricsTab" id="btn-metrics">Model Performance</button>
+        </div>
+
+        <!-- TAB 1: Visualizer & Predictor -->
+        <div id="visualizerTab" class="tab-content active">
+            <!-- Left Panel: Controls & Predictions -->
+            <div class="glass-card">
+                <div class="card-title">
+                    <span>Query Configuration</span>
+                </div>
+
+                <div class="control-group">
+                    <label for="kSelect">
+                        <span>Number of Neighbors (K)</span>
+                    </label>
+                    <select id="kSelect">
+                        <option value="1">K = 1</option>
+                        <option value="3">K = 3</option>
+                        <option value="5" selected>K = 5 (Default)</option>
+                        <option value="7">K = 7</option>
+                        <option value="9">K = 9</option>
+                        <option value="15">K = 15</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="sepalLength">
+                        <span>Sepal Length</span>
+                        <span class="value-display" id="sepalLengthVal">5.1 cm</span>
+                    </label>
+                    <input type="range" id="sepalLength" min="4.3" max="7.9" step="0.1" value="5.1">
+                </div>
+
+                <div class="control-group">
+                    <label for="sepalWidth">
+                        <span>Sepal Width</span>
+                        <span class="value-display" id="sepalWidthVal">3.5 cm</span>
+                    </label>
+                    <input type="range" id="sepalWidth" min="2.0" max="4.4" step="0.1" value="3.5">
+                </div>
+
+                <div class="control-group">
+                    <label for="petalLength">
+                        <span>Petal Length</span>
+                        <span class="value-display" id="petalLengthVal">1.4 cm</span>
+                    </label>
+                    <input type="range" id="petalLength" min="1.0" max="6.9" step="0.1" value="1.4">
+                </div>
+
+                <div class="control-group">
+                    <label for="petalWidth">
+                        <span>Petal Width</span>
+                        <span class="value-display" id="petalWidthVal">0.2 cm</span>
+                    </label>
+                    <input type="range" id="petalWidth" min="0.1" max="2.5" step="0.1" value="0.2">
+                </div>
+
+                <div class="prediction-display">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Predicted Class</span>
+                    <div id="predictionResult" class="prediction-text text-setosa">Setosa</div>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Confidence: <strong id="confidenceVal" style="color: white">100%</strong></span>
+                </div>
+
+                <div class="control-group">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Vote Breakdown</span>
+                    <div id="voteBreakdown">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Canvas Visualization -->
+            <div class="glass-card">
+                <div class="card-title">
+                    <span>2D Scatter Plot Visualizer</span>
+                </div>
+
+                <div class="plot-controls">
+                    <div class="control-group" style="flex: 1;">
+                        <label for="xAxisSelect">X-Axis Dimension</label>
+                        <select id="xAxisSelect">
+                            <option value="0">Sepal Length</option>
+                            <option value="1">Sepal Width</option>
+                            <option value="2" selected>Petal Length</option>
+                            <option value="3">Petal Width</option>
+                        </select>
+                    </div>
+                    <div class="control-group" style="flex: 1;">
+                        <label for="yAxisSelect">Y-Axis Dimension</label>
+                        <select id="yAxisSelect">
+                            <option value="0">Sepal Length</option>
+                            <option value="1">Sepal Width</option>
+                            <option value="2">Petal Length</option>
+                            <option value="3" selected>Petal Width</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="scatterPlot"></canvas>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="dot setosa"></span>
+                        <span>Setosa</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot versicolor"></span>
+                        <span>Versicolor</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot virginica"></span>
+                        <span>Virginica</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot query"></span>
+                        <span>Query Point (You)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Model Performance & Metrics -->
+        <div id="metricsTab" class="tab-content">
+            <!-- Left Card: Metrics and Confusion Matrix -->
+            <div class="glass-card">
+                <div class="card-title">
+                    <span>Performance Metrics (K = 5)</span>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-val">93.33%</div>
+                        <div class="metric-label">Model Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-val">0.93</div>
+                        <div class="metric-label">Macro F1 Score</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 1rem; font-family: 'Outfit';">Confusion Matrix</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Actual \ Predicted</th>
+                                <th>Setosa</th>
+                                <th>Versicolor</th>
+                                <th>Virginica</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Setosa</th>
+                                <td style="color: var(--purple); font-weight: bold;">10</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>Versicolor</th>
+                                <td>0</td>
+                                <td style="color: var(--cyan); font-weight: bold;">10</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th>Virginica</th>
+                                <td>0</td>
+                                <td>2</td>
+                                <td style="color: var(--rose); font-weight: bold;">8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin-top: 1rem; font-family: 'Outfit';">Classification Report</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                                <th>Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Setosa</td>
+                                <td>1.00</td>
+                                <td>1.00</td>
+                                <td>1.00</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>Versicolor</td>
+                                <td>0.83</td>
+                                <td>1.00</td>
+                                <td>0.91</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>Virginica</td>
+                                <td>1.00</td>
+                                <td>0.80</td>
+                                <td>0.89</td>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Card: Elbow Plot -->
+            <div class="glass-card">
+                <div class="card-title">
+                    <span>Elbow Method Optimal K Search</span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    The graph below illustrates the classification error rate calculated for K values ranging from 1 to 20. The optimal K is selected at the minimum error rate to avoid underfitting or overfitting.
+                </p>
+                <div class="img-container">
+                    <img src="knn_elbow_plot.png" alt="Elbow Method Curve">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with Vanilla HTML, CSS, and JS. Antigravity AI Engine.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
